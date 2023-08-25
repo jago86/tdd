@@ -47,7 +47,7 @@ class LoginTest extends TestCase
         ]);
 
         // La acción a realizar
-        $response = $this->post('/login', [
+        $response = $this->from('/login')->post('/login', [
             'email' => 'john@example.com',
             'password' => 'incorrect',
         ]);
