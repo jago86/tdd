@@ -14,5 +14,6 @@ class Transfer extends Model
         'to_email',
         'title',
         'message',
+        'file',
     ];
 }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('to_email');
             $table->string('title');
             $table->text('message')->nullable();
+            $table->string('file');
             $table->timestamps();
         });
     }

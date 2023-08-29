@@ -4,12 +4,21 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\Transfer;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TransfersTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        Storage::fake();
+    }
 
     protected function validParams($overrides = [])
     {
@@ -18,19 +27,23 @@ class TransfersTest extends TestCase
             'to_email' => 'susan@example.com',
             'title' => 'Vacation photos',
             'message' => 'Here I send you the photos',
+            'file' => UploadedFile::fake()->image('prety-photo.jpg'),
         ], $overrides);
     }
 
     /** @test */
     public function a_guest_can_create_transfer()
     {
+        Storage::fake();
         $this->assertEquals(0, Transfer::count());
+        $uploadedFile = UploadedFile::fake()->image('prety-photo.jpg');
 
         $response = $this->post('/transfers', [
             'from_email' => 'john@example.com',
             'to_email' => 'susan@example.com',
             'title' => 'Vacation photos',
             'message' => 'Here I send you the photos',
+            'file' => $uploadedFile,
         ]);
 
         $response->assertStatus(302)
@@ -40,6 +53,8 @@ class TransfersTest extends TestCase
         $this->assertEquals('susan@example.com', $transfer->to_email);
         $this->assertEquals('Vacation photos', $transfer->title);
         $this->assertEquals('Here I send you the photos', $transfer->message);
+        $this->assertEquals('prety-photo.jpg', $transfer->file);
+        Storage::assertExists('transfers/prety-photo.jpg');
     }
 
     /** @test */
@@ -159,6 +174,51 @@ class TransfersTest extends TestCase
         $response->assertStatus(302)
             ->assertRedirect('/');
         $response->assertSessionHasErrors('message');
+        $this->assertEquals(0, Transfer::count());
+    }
+
+    /** @test */
+    public function file_is_required()
+    {
+        $this->assertEquals(0, Transfer::count());
+
+        $response = $this->post('/transfers', $this->validParams([
+            'file' => null,
+        ]));
+
+        $response->assertStatus(302)
+            ->assertRedirect('/');
+        $response->assertSessionHasErrors('file');
+        $this->assertEquals(0, Transfer::count());
+    }
+
+    /** @test */
+    public function file_should_be_a_file()
+    {
+        $this->assertEquals(0, Transfer::count());
+
+        $response = $this->post('/transfers', $this->validParams([
+            'file' => 'asdsadkaj',
+        ]));
+
+        $response->assertStatus(302)
+            ->assertRedirect('/');
+        $response->assertSessionHasErrors('file');
+        $this->assertEquals(0, Transfer::count());
+    }
+
+    /** @test */
+    public function file_should_be_max_2gb()
+    {
+        $this->assertEquals(0, Transfer::count());
+
+        $response = $this->post('/transfers', $this->validParams([
+            'file' => UploadedFile::fake()->create('photos.zip', 2097153),
+        ]));
+
+        $response->assertStatus(302)
+            ->assertRedirect('/');
+        $response->assertSessionHasErrors('file');
         $this->assertEquals(0, Transfer::count());
     }
 }
