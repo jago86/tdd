@@ -19,6 +19,6 @@ class HomeTest extends TestCase
 
 		// El resultado esperado
         $response->assertStatus(200);
-        $response->assertSee('Bienvenidos al curso de TDD');
+        $response->assertSee('Enviar Archivos');
     }
 }
