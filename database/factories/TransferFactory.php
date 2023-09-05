@@ -17,7 +17,9 @@ class TransferFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'from_email' => $this->faker->safeEmail(),
+            'to_email' => $this->faker->safeEmail(),
+            'title' => $this->faker->sentence(),
         ];
     }
 }

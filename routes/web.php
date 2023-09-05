@@ -8,6 +8,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/transfers/{id}', [TransfersController::class, 'download']);
 Route::post('/transfers', [TransfersController::class, 'store']);
 
 Route::get('/dashboard', function () {

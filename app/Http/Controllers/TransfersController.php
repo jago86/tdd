@@ -4,9 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Transfer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TransfersController extends Controller
 {
+
+    public function download($id)
+    {
+        $transfer = Transfer::find($id);
+        $filePath = Storage::path($transfer->file);
+
+        return response()
+            ->streamDownload(function () use ($filePath) {
+                readfile($filePath);
+            }, basename($filePath), [
+                'Content-type' => Storage::mimeType($transfer->file)
+            ]);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
