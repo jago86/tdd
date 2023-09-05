@@ -1,11 +1,18 @@
 <?php
 
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransfersController;
 
 Route::get('/', function () {
-    return view('welcome');
+
+    $response = Http::withHeader('X-Api-Key', 'x2NwBUDx3qbob1SNHMqYZA==xqzRDmXcXY1CzN2B')
+        ->get('https://api.api-ninjas.com/v1/quotes');
+
+    return view('welcome')->with([
+        'quote' => $response->collect()->first(),
+    ]);
 });
 
 Route::get('/transfers/{hash}', [TransfersController::class, 'download']);

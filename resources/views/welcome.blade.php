@@ -14,6 +14,10 @@
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body>
+        <div>
+            <p>{{ $quote['quote'] }}</p>
+            <p>{{ $quote['author'] }}</p>
+        </div>
         <div class="mx-auto my-20 w-[27rem] rounded bg-gray-50 p-8 shadow-md">
             <h1 class="mb-4 text-2xl font-bold">Enviar Archivos</h1>
             <form action="#" class="space-y-4">
