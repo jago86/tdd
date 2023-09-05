@@ -20,6 +20,7 @@ class TransferFactory extends Factory
             'from_email' => $this->faker->safeEmail(),
             'to_email' => $this->faker->safeEmail(),
             'title' => $this->faker->sentence(),
+            'file' => 'transfers/' . $this->faker->word() . '.jpg',
         ];
     }
 }

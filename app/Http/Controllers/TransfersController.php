@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Storage;
 class TransfersController extends Controller
 {
 
-    public function download($id)
+    public function download($hash)
     {
-        $transfer = Transfer::find($id);
+        $transfer = Transfer::where('hash', $hash)->first();
         $filePath = Storage::path($transfer->file);
 
         return response()

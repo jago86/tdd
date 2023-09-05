@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('message')->nullable();
             $table->string('file');
+            $table->text('hash')->nullable();
             $table->timestamps();
         });
     }

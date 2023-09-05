@@ -19,12 +19,12 @@ class TransferDownloadTest extends TestCase
         $downloadableFile = file_get_contents(base_path('tests/__fixtures__/images.zip'));
         Storage::put('transfers/images.zip', $downloadableFile);
         Storage::assertExists('transfers/images.zip');
-        Transfer::factory()->create([
+        $transfer = Transfer::factory()->create([
             'id' => 123,
             'file' => 'transfers/images.zip',
         ]);
 
-        $response = $this->get('transfers/123');
+        $response = $this->get("transfers/{$transfer->hash}");
 
         $response->assertStatus(200);
         $response->assertHeader('Content-type', 'application/zip');
