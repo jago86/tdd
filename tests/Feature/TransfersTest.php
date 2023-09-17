@@ -4,7 +4,9 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\Transfer;
+use App\Mail\TransferReceived;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -55,6 +57,25 @@ class TransfersTest extends TestCase
         $this->assertEquals('Here I send you the photos', $transfer->message);
         $this->assertEquals('prety-photo.jpg', $transfer->file);
         Storage::assertExists('transfers/prety-photo.jpg');
+    }
+
+    /** @test */
+    public function an_email_is_sent_to_recipient()
+    {
+        Storage::fake();
+        Mail::fake();
+        $this->assertEquals(0, Transfer::count());
+        $uploadedFile = UploadedFile::fake()->image('prety-photo.jpg');
+
+        $response = $this->post('/transfers', $this->validParams());
+
+        $response->assertStatus(302)
+            ->assertRedirect('/');
+        $transfer = Transfer::first();
+        Mail::assertSent(TransferReceived::class);
+        Mail::assertSent(function (TransferReceived $mail) use ($transfer) {
+            return $mail->transfer->id == $transfer->id;
+        });
     }
 
     /** @test */

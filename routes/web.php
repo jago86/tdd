@@ -15,7 +15,8 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/transfers/{hash}', [TransfersController::class, 'download']);
+Route::get('/transfers/{hash}', [TransfersController::class, 'download'])
+    ->name('download');
 Route::post('/transfers', [TransfersController::class, 'store']);
 
 Route::get('/dashboard', function () {
