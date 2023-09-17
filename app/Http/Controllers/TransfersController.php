@@ -46,6 +46,8 @@ class TransfersController extends Controller
 
         Mail::send(new TransferReceived($transfer));
 
+        session()->flash('success', 'Tus archivos se enviaron correctamente.');
+
         return back();
     }
 }

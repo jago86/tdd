@@ -18,6 +18,11 @@
         <div class="flex my-10 gap-x-20">
             <div class="ml-10 w-[27rem] rounded bg-gray-50 p-8 shadow-md">
                 <h1 class="mb-4 text-2xl font-bold">Enviar Archivos</h1>
+                @if (session()->exists('success'))
+                    <div class="font-semibold text-green-500">
+                        Tus archivos se enviaron correctamente.
+                    </div>
+                @endif
                 <form action="/transfers" class="space-y-4" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div>
