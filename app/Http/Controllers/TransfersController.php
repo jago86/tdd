@@ -34,14 +34,14 @@ class TransfersController extends Controller
             'file' => 'required|file|max:2097152',
         ]);
 
-        $request->file('file')->storeAs('transfers', $request->file('file')->getClientOriginalName());
+        $file = $request->file('file')->storeAs('transfers', $request->file('file')->getClientOriginalName());
 
         $transfer = Transfer::create([
             'from_email' => $request->input('from_email'),
             'to_email' => $request->input('to_email'),
             'title' => $request->input('title'),
             'message' => $request->input('message'),
-            'file' => $request->file('file')->getClientOriginalName(),
+            'file' => $file,
         ]);
 
         Mail::send(new TransferReceived($transfer));

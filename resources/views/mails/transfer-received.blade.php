@@ -13,6 +13,6 @@
     <br>
     Title: {{ $transfer->title }}
     <br>
-    Click the link to download the files: <a href="{{ $transfer->hash }}">{{ $transfer->hash }}</a>.
+    Click the link to download the files: <a href="{{ route('download', ['hash' => $transfer->hash]) }}">{{ route('download', ['hash' => $transfer->hash]) }}</a>.
 </body>
 </html>

@@ -55,7 +55,7 @@ class TransfersTest extends TestCase
         $this->assertEquals('susan@example.com', $transfer->to_email);
         $this->assertEquals('Vacation photos', $transfer->title);
         $this->assertEquals('Here I send you the photos', $transfer->message);
-        $this->assertEquals('prety-photo.jpg', $transfer->file);
+        $this->assertEquals('transfers/prety-photo.jpg', $transfer->file);
         Storage::assertExists('transfers/prety-photo.jpg');
     }
 

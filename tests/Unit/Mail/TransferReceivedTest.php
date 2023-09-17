@@ -23,6 +23,6 @@ class TransferReceivedTest extends TestCase
 
         $mailable->assertFrom('john@example.com');
         $mailable->assertTo('susan@example.com');
-        $mailable->assertSeeInHtml($transfer->hash);
+        $mailable->assertSeeInHtml(route('download', ['hash' => $transfer->hash]));
     }
 }
